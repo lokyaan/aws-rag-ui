@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-import SiliconLabsLogo from "./assets/silicon-labs-logo.svg";
+import SiliconLabsLogo from "./assets/SiliconLabsLogo.png";
 import { API_BASE } from "./config";
 const FN_URL = API_BASE; // use this for fetch(`${FN_URL}/rag`, ...)
 
