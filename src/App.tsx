@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-import NasuniLogo from "./assets/NasuniLogo.png";
+import SiliconLabsLogo from "./assets/silicon-labs-logo.svg";
 import { API_BASE } from "./config";
 const FN_URL = API_BASE; // use this for fetch(`${FN_URL}/rag`, ...)
 
@@ -19,7 +19,7 @@ type ChatMsg =
       error?: string;
     };
 
-const LS_KEY = "nasuni_chat_history_v1";
+const LS_KEY = "siliconlabs_chat_history_v1";
 
 export default function App() {
   const [input, setInput] = useState("");
@@ -128,9 +128,9 @@ export default function App() {
       <div className="container container--chat">
         {/* Header */}
         <header className="header">
-          <img src={NasuniLogo} className="logo" alt="Nasuni" />
+          <img src={SiliconLabsLogo} className="logo" alt="SiliconLabs" />
           <div className="header-meta">
-            <span className="brand">File Data Platform</span>
+            <span className="brand">Leading innovator in low-power wireless connectivity</span>
             <button className="new-chat" onClick={newChat} title="New chat">
               New chat
             </button>
@@ -140,8 +140,8 @@ export default function App() {
         {/* Title / Subtitle */}
         {msgs.length === 0 && (
           <section className="hero hero--center">
-            <h1 className="h1">NASUNI</h1>
-            <p className="sub">Ask your queries about Nasuni here.</p>
+            <h1 className="h1">SiliconLabs</h1>
+            <p className="sub">Ask your queries about Silicon Labs here.</p>
           </section>
         )}
 
@@ -205,8 +205,8 @@ export default function App() {
 
         {/* Footer */}
         <footer className="footer">
-          Unofficial demo for educational purposes. Nasuni® is a trademark of
-          Nasuni Corporation.
+          Unofficial demo for educational purposes. SiliconLabs® is a trademark of
+          Silicon Labs Corporation.
         </footer>
       </div>
     </div>
