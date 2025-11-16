@@ -1,9 +1,18 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import SiliconLabsLogo from "./assets/SiliconLabsLogo.png";
-import { API_BASE } from "./config";
-const FN_URL = API_BASE; // use this for fetch(`${FN_URL}/rag`, ...)
+import { API_BASE, LS_KEY, BRAND } from "./config";
+
+// Normalize base once & build endpoints safely (no string bugs)
+const FN_URL = new URL("/", API_BASE).toString().replace(/\/$/, "");
+const RAG_URL = new URL("/rag", FN_URL).toString();
+const HEALTH_URL = new URL("/health", FN_URL).toString();
+
 console.log("API_BASE =", API_BASE);
+console.log("FN_URL   =", FN_URL);
+console.log("RAG_URL  =", RAG_URL);
+console.log("HEALTH_URL =", HEALTH_URL);
+
 // Types
 type Source = { id: string; key: string };
 type BackendOut = { answer?: string; sources?: Source[]; error?: string };
@@ -18,8 +27,6 @@ type ChatMsg =
       sources?: Source[];
       error?: string;
     };
-
-const LS_KEY = "siliconlabs_chat_history_v1";
 
 export default function App() {
   const [input, setInput] = useState("");
@@ -60,11 +67,18 @@ export default function App() {
     setLoading(true);
 
     try {
-      const r = await fetch(`${FN_URL}/rag`, {
+      const r = await fetch(RAG_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: prompt.trim() }),
       });
+
+      // If backend sends non-2xx, try to capture text for error
+      if (!r.ok) {
+        const errText = await r.text().catch(() => "");
+        throw new Error(errText || `HTTP ${r.status}`);
+      }
+
       const data = (await r.json()) as BackendOut;
 
       const asstMsg: ChatMsg = {
@@ -85,6 +99,7 @@ export default function App() {
         error: err?.message || "Network error",
       };
       setMsgs((m) => [...m, asstMsg]);
+      console.error("RAG POST failed:", err);
     } finally {
       setLoading(false);
     }
@@ -107,17 +122,12 @@ export default function App() {
   // Regenerate last answer (resend the last user query)
   function regenerate() {
     if (loading) return;
-    // Find last user message
     const lastUser = [...msgs].reverse().find((m) => m.role === "user");
     if (!lastUser) return;
     setLoading(true);
-    // Remove trailing assistant (if any) so regenerate replaces it in flow
     setMsgs((m) => {
       const trimmed = [...m];
-      // If the very last message is assistant, pop it
-      if (trimmed[trimmed.length - 1]?.role === "assistant") {
-        trimmed.pop();
-      }
+      if (trimmed[trimmed.length - 1]?.role === "assistant") trimmed.pop();
       return trimmed;
     });
     void sendPrompt(lastUser.text);
@@ -128,9 +138,11 @@ export default function App() {
       <div className="container container--chat">
         {/* Header */}
         <header className="header">
-          <img src={SiliconLabsLogo} className="logo" alt="SiliconLabs" />
+          <img src={SiliconLabsLogo} className="logo" alt={BRAND} />
           <div className="header-meta">
-            <span className="brand">Leading innovator in low-power wireless connectivity</span>
+            <span className="brand">
+              Leading innovator in low-power wireless connectivity
+            </span>
             <button className="new-chat" onClick={newChat} title="New chat">
               New chat
             </button>
@@ -140,8 +152,8 @@ export default function App() {
         {/* Title / Subtitle */}
         {msgs.length === 0 && (
           <section className="hero hero--center">
-            <h1 className="h1">SiliconLabs</h1>
-            <p className="sub">Ask your queries about Silicon Labs here.</p>
+            <h1 className="h1">{BRAND}</h1>
+            <p className="sub">Ask your queries about {BRAND} here.</p>
           </section>
         )}
 
@@ -205,8 +217,8 @@ export default function App() {
 
         {/* Footer */}
         <footer className="footer">
-          Unofficial demo for educational purposes. SiliconLabs® is a trademark of
-          Silicon Labs Corporation.
+          Unofficial demo for educational purposes. SiliconLabs® is a trademark
+          of Silicon Labs Corporation.
         </footer>
       </div>
     </div>
