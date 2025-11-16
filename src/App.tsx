@@ -3,7 +3,7 @@ import "./App.css";
 import SiliconLabsLogo from "./assets/SiliconLabsLogo.png";
 import { API_BASE } from "./config";
 const FN_URL = API_BASE; // use this for fetch(`${FN_URL}/rag`, ...)
-
+console.log("API_BASE =", API_BASE);
 // Types
 type Source = { id: string; key: string };
 type BackendOut = { answer?: string; sources?: Source[]; error?: string };
