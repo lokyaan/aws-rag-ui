@@ -1,4 +1,3 @@
-import React from "react";
 import "./NoticeModal.css";
 
 export default function NoticeModal({
