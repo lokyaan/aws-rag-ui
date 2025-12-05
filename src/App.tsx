@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-import chatBot from "./assets/chatbot.png";
+import chatBot from "./assets/chatBot.png";
 import { API_BASE, LS_KEY, BRAND } from "./config";
 import NoticeModal from "./NoticeModal";
 
