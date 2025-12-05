@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-import SiliconLabsLogo from "./assets/SiliconLabsLogo.png";
+import chatBot from "./assets/chatbot.png";
 import { API_BASE, LS_KEY, BRAND } from "./config";
+import NoticeModal from "./NoticeModal.tsx";
 
 // Normalize base once & build endpoints safely (no string bugs)
 const FN_URL = new URL("/", API_BASE).toString().replace(/\/$/, "");
@@ -39,6 +40,15 @@ export default function App() {
     }
   });
   const [loading, setLoading] = useState(false);
+
+  // Show notice modal on first visit (or if storage cleared)
+  const [showNotice, setShowNotice] = useState<boolean>(() => {
+    try {
+      return !localStorage.getItem("noticeDismissed");
+    } catch {
+      return true;
+    }
+  });
 
   const toHref = useMemo(
     () => (s: string) => (/^https?:\/\//i.test(s) ? s : undefined),
@@ -133,12 +143,24 @@ export default function App() {
     void sendPrompt(lastUser.text);
   }
 
+  function handleNoticeClose() {
+    try {
+      localStorage.setItem("noticeDismissed", "yes");
+    } catch {
+      // ignore
+    }
+    setShowNotice(false);
+  }
+
   return (
     <div className="page">
+      {/* Pop-up notice on top of everything */}
+      {showNotice && <NoticeModal onClose={handleNoticeClose} />}
+
       <div className="container container--chat">
         {/* Header */}
         <header className="header">
-          <img src={SiliconLabsLogo} className="logo" alt={BRAND} />
+          <img src={chatBot} className="logo" alt={BRAND} />
           <div className="header-meta">
             <span className="brand">
               Leading innovator in low-power wireless connectivity
@@ -206,7 +228,9 @@ export default function App() {
             </button>
             <button
               type="submit"
-              className={`btn ${loading || !input.trim() ? "btn-disabled" : ""}`}
+              className={`btn ${
+                loading || !input.trim() ? "btn-disabled" : ""
+              }`}
               disabled={loading || !input.trim()}
               title="Send"
             >
@@ -217,8 +241,8 @@ export default function App() {
 
         {/* Footer */}
         <footer className="footer">
-          Unofficial demo for educational purposes. SiliconLabs® is a trademark
-          of Silicon Labs Corporation.
+          Unofficial demo for educational purposes. {BRAND} RAG assistant. Queries
+          are answered only based on {BRAND}-related knowledge.
         </footer>
       </div>
     </div>
