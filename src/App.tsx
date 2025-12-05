@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import chatBot from "./assets/chatbot.png";
 import { API_BASE, LS_KEY, BRAND } from "./config";
-import NoticeModal from "./NoticeModal.tsx";
+import NoticeModal from "./NoticeModal";
 
 // Normalize base once & build endpoints safely (no string bugs)
 const FN_URL = new URL("/", API_BASE).toString().replace(/\/$/, "");
