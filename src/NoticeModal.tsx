@@ -11,7 +11,7 @@ export default function NoticeModal({
         <h2>Unofficial Demo</h2>
         <p>
           This app is an unofficial demo showcasing Retrieve-Augmented Generation (RAG) 
-          for answering queries about <strong>CM.com Company</strong>.  
+          for answering queries about <strong>CDK Global Company</strong>.  
         </p>
         <p>
           Questions outside the scope of the company may not be answered accurately 

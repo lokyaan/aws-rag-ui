@@ -163,7 +163,7 @@ export default function App() {
           <img src={chatBot} className="logo" alt={BRAND} />
           <div className="header-meta">
             <span className="brand">
-              CM.com -Deepen relationships. With every interaction
+              CDK Global -Simplify the Business of Automotive.
             </span>
             <button className="new-chat" onClick={newChat} title="New chat">
               New chat
