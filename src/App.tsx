@@ -163,7 +163,7 @@ export default function App() {
           <img src={chatBot} className="logo" alt={BRAND} />
           <div className="header-meta">
             <span className="brand">
-              CDK Global -Simplify the Business of Automotive.
+              NCR Atleos - Access Expanded
             </span>
             <button className="new-chat" onClick={newChat} title="New chat">
               New chat
