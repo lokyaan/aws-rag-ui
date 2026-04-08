@@ -163,7 +163,7 @@ export default function App() {
           <img src={chatBot} className="logo" alt={BRAND} />
           <div className="header-meta">
             <span className="brand">
-              American Heritage Credit Union - Your Financial Partner
+              techolution - TURN YOUR AI INTO ROI
             </span>
             <button className="new-chat" onClick={newChat} title="New chat">
               New chat
